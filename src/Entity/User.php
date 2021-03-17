@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\User;
+namespace App\Entity;
 
 use Serializable;
 use Doctrine\ORM\Mapping as ORM;

@@ -65,7 +65,7 @@ class AdminPropertyController extends AbstractController
             $this->addFlash('info', 'Bien créer avec succès');
 
 
-            return $this->redirectToRoute('admin.property.index');
+            return $this->redirectToRoute('admin/property/index');
         }
 
         return $this->render('admin/property/new.html.twig', [

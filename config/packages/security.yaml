@@ -11,8 +11,7 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: false
-            lazy: true
+            anonymous: true
             logout:
                  path: /logout
                  target: /
