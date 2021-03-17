@@ -12,6 +12,7 @@ security:
             security: false
         main:
             anonymous: true
+            lazy: true
             logout:
                  path: /logout
                  target: /
