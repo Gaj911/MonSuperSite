@@ -9,7 +9,18 @@
 		<div class="bg-light">
 
 			<div classe="row">
-				<div classe="col-md-8"></div>
+
+				<div classe="col-md-8">
+
+					{# Bundle Vich pour upload img et imagine_filter pour la taille auto de l'img #}
+					{% if property.filename %}
+						<img src="{{ vich_uploader_asset(property, 'imageFile') | imagine_filter('medium')}}" alt="Photo du bien" class="cart-img-top">
+					{% else %}
+						<img src="{{ '/images/properties/empty.jpg' | imagine_filter('medium')}}" alt="Photo du bien" class="cart-img-top">
+
+					{% endif %}
+				</div>
+
 				<div classe="col-md-4">
 					<h1>{{property.title}}</h1>
 					<h2>{{property.rooms}}
@@ -36,7 +47,8 @@
 						<table class="table table-striped">
 							<tr>
 								<td>Surface Habitable</td>
-								<td>{{property.surface}} m²</td>
+								<td>{{property.surface}}
+									m²</td>
 							</tr>
 							<tr>
 								<td>Pièces</td>
@@ -59,6 +71,11 @@
 					</div>
 					<div class="col-md-4">
 						<h2>Spécificités</h2>
+						<ul class="list-group">
+							{% for option in property.options %}
+								<li class="list-group-item">{{ option.name }}</li>
+							{% endfor %}
+						</ul>
 					</div>
 
 
