@@ -15,10 +15,12 @@
 
 		<h2>Les derniers biens</2>
 
-		<div class="row flex m-4">
+		<div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
 			{% for property in properties %}
-				
-					<div class="card" style="width: 18rem;">
+
+				<div class="col">
+
+					<div class="card">
 
 						<div class="card-body">
 
@@ -29,13 +31,14 @@
 							</h5>
 							<p classe="card-text">{{ property.city }}
 								({{ property.postaleCode }})</p>
-							<div class="text-primary">{{ property.formattedPrice  }} €</div>
+							<div class="text-primary">{{ property.formattedPrice  }}
+								€</div>
 
 						</div>
-
 					</div>
+				</div>
 
-			
+
 			{% endfor %}
 
 		</div>
