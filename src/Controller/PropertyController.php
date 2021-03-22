@@ -2,17 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\Contact;
 use App\Entity\Property;
+use App\Form\ContactType;
 use App\Entity\PropertySearch;
 use App\Form\PropertySearcheType;
+use App\Notification\ContactNotification;
 use App\Repository\PropertyRepository;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class PropertyController extends AbstractController
 {
@@ -38,7 +41,7 @@ class PropertyController extends AbstractController
      * @return Response
      */
     public function index(PaginatorInterface $paginator, Request $request): Response
-    {  
+    {
         // Créer une entité qui va représenter notre recherche PropertySearch
         // Créer un formulaire PropertySearchType
 
@@ -55,7 +58,7 @@ class PropertyController extends AbstractController
             $this->repository->findAllVisibleQuery($search),
             $request->query->getInt('page', 1),
             9
-            );
+        );
         return $this->render('property/index.html.twig', [
             'current_menu' => 'properties',
             'properties' => $properties,
@@ -67,18 +70,38 @@ class PropertyController extends AbstractController
      * @Route("/biens/{slug}-{id}", name="property.show", requirements={"slug": "[a-z0-9\-]*"})
      * @return Response
      */
-    public function show(Property $property, string $slug): Response
+    public function show(Property $property, string $slug, Request $request, ContactNotification $notification): Response
     {
-        if ($property->getSlug() !== $slug){
-           return $this->redirectToRoute('property.show', [
-               'id' => $property->getId(),
-               'slug' => $property->getSlug()
-           ], 301);
+
+
+        if ($property->getSlug() !== $slug) {
+            return $this->redirectToRoute('property.show', [
+                'id' => $property->getId(),
+                'slug' => $property->getSlug()
+            ], 301);
         }
+
+        // formulaire de contact par l'agence
+        $contact = new Contact();
+        $contact->setProperty($property);
+        $form = $this->createForm(ContactType::class, $contact);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $notification->notify($contact);
+            $this->addFlash('success', 'Votre mail a été envoyé');
+
+            // return $this->redirectToRoute('property.show', [
+            //     'id' => $property->getId(),
+            //     'slug' => $property->getSlug()
+            // ] );
+        }
+
         return $this->render('property/show.html.twig', [
             'property' => $property,
-            'current_menu' => 'properties'
+            'current_menu' => 'properties',
+            'form' => $form->createView()
         ]);
     }
-
 }
