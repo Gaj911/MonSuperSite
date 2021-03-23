@@ -11,13 +11,13 @@
 		<table>
 			<thead>
 				<tr>
-					<th colspan="2">demande de Contact</th>
+					<th colspan="2">Demande de Contact</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td>Nom du bien</td>
-					<td>{{ contact.property.title }}</td>
+					<td>Nom du bien : </td>
+					<td><a href="{{ url('property.show', {id: contact.property.id, slug: contact.property.slug}) }}">{{ contact.property.title }}</a></td>
 				</tr>
 				<tr>
 					<td>Nom</td>
